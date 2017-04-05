@@ -28,6 +28,21 @@ var albumMarconi = {
      ]
 };
 
+var albumTotoro = {
+     title: 'Totoro Jazz',
+     artist: 'Hayao Miyazaki',
+     label: 'Studio Ghibli',
+     year: '1996',
+     albumArtUrl: 'assets/images/album_covers/totoro-jazz.jpeg',
+     songs: [
+         { title: 'Neko Bus', duration: '2:25' },
+         { title: 'Mother\'s House', duration: '4:30' },
+         { title: 'Ear of Corn', duration: '2:40'},
+         { title: 'Three Little Sprouts', duration: '4:24' },
+         { title: 'The Wind', duration: '3:30'}
+     ]
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
      var template =
         '<tr class="album-view-song-item">'
@@ -40,20 +55,21 @@ var createSongRow = function(songNumber, songName, songLength) {
      return template;
 };
 
+// All HTML elements required to display on album page
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0]
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
 var setCurrentAlbum = function(album) {
-     // Select all HTML elements required to display on album page
-     var albumTitle = document.getElementsByClassName('album-view-title')[0];
-     var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-     var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-     var albumImage = document.getElementsByClassName('album-cover-art')[0];
-     var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
- 
+    
      // Identify first child node of an element. Use nodeValue to return or set value of node.
      albumTitle.firstChild.nodeValue = album.title;
      albumArtist.firstChild.nodeValue = album.artist;
      albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
      albumImage.setAttribute('src', album.albumArtUrl);
- 
+    
      // Clear the value of the HTML element with class album-view-song-list
      albumSongList.innerHTML = '';
  
@@ -64,7 +80,18 @@ var setCurrentAlbum = function(album) {
          albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
      }
 };
- 
+
+
+
 window.onload = function() {
-     setCurrentAlbum(albumPicasso);
+    
+    var albumArray = [albumPicasso, albumMarconi, albumTotoro];
+    var i = 0;
+    
+    setCurrentAlbum(albumArray[0]);
+    
+    albumImage.addEventListener('click', function(e){
+        setCurrentAlbum(albumArray[i++]);
+        if (i==albumArray.length) i = 0;
+    });
 };
